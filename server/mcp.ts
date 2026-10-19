@@ -1,0 +1,10 @@
+import "dotenv/config";
+import { mkdirSync } from "node:fs";
+import path from "node:path";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { createStore } from "./store.ts";
+import { createMcpServer } from "./mcp-tools.ts";
+const dir = path.resolve(process.env.DATA_DIR || "data");
+mkdirSync(dir, { recursive: true });
+const store = createStore(path.join(dir, "pagemate.db"));
+await createMcpServer(store).connect(new StdioServerTransport());
